@@ -49,11 +49,11 @@ items.forEach((item,index)=>item.querySelector('button').addEventListener('click
  if(opening){$('.experience-art').dataset.scene=String(index);$('.art-type').innerHTML=posters[index];}
  schedule();
 }));
-// Two identical decoders overlap for 1.5 seconds. The next clip starts at zero
+// Two forward-only decoders overlap for 0.8 source seconds. The next clip starts at zero
 // while the current clip finishes; swapping layers avoids a hard backward cut.
 const videos=[$('.video-a'),$('.video-b')];
 let active=0,blending=false,mediaVisible=true;
-const overlap=1.5;
+const overlap=.8;
 function playSafe(video){const playing=video.play();if(playing)playing.catch(()=>{});}
 function resetVideos(){videos.forEach(v=>{v.pause();v.currentTime=0;v.style.opacity='0';});active=0;blending=false;}
 function startVideos(){if(reduced||document.hidden||!mediaVisible)return;videos[active].style.opacity='1';playSafe(videos[active]);if(blending)playSafe(videos[1-active]);}
@@ -62,12 +62,12 @@ function tickVideo(){
  if(!reduced&&!document.hidden&&mediaVisible&&Number.isFinite(current.duration)){
   const frame=loopFrame(current.duration,current.currentTime,overlap);
   if(!blending&&frame.startNext&&next.readyState>=2){next.currentTime=0;playSafe(next);blending=true;}
-  if(blending){const blend=frame.blend;current.style.opacity=String(1-blend);next.style.opacity=String(blend);if(frame.swap||current.ended){current.pause();current.currentTime=0;current.style.opacity='0';active=1-active;videos[active].style.opacity='1';blending=false;}}
+  if(blending){const blend=frame.blend;current.style.opacity=String(active===0?1:1-blend);next.style.opacity=String(active===0?blend:1);if(frame.swap||current.ended){current.pause();current.currentTime=0;current.style.opacity='0';active=1-active;videos[active].style.opacity='1';blending=false;}}
   else if(current.ended){current.currentTime=0;playSafe(current);}
  }
  requestAnimationFrame(tickVideo);
 }
-videos.forEach(v=>{v.muted=true;v.addEventListener('loadeddata',startVideos,{once:true});});
+videos.forEach(v=>{v.muted=true;v.playbackRate=.7;v.addEventListener('loadeddata',startVideos,{once:true});});
 const videoObserver=new IntersectionObserver(([entry])=>{mediaVisible=entry.isIntersecting;if(mediaVisible)startVideos();else videos.forEach(v=>v.pause());},{threshold:0});videoObserver.observe($('.voyage'));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)videos.forEach(v=>v.pause());else startVideos();});
 reducedQuery.addEventListener('change',()=>{reduced=reducedQuery.matches;resetVideos();if(!reduced)startVideos();schedule();});

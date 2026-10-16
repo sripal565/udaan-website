@@ -20,3 +20,6 @@ A separate read-only reviewer found two P2 accessibility defects: opacity-hidden
 Reduced-motion CSS and live preference handling were source-reviewed; operating-system preference switching was not emulated in the browser tool. Contact links use the project-provided email. Event dates, registration links and team roster were not supplied and are not invented. Anurati is used in the private preview; its public website license is noted in assets/ATTRIBUTION.md.
 
 Checkpoint: implementation and review complete; publish owner-private preview via Sites. No existing source or user work removed.
+
+## Cloud-direction correction
+Source frames show leftward drift through 5 seconds, a slowdown around 6 seconds, and rightward drift during 6–9 seconds. Exported only 0–5 seconds to cloud-forward-v2.mp4 using AVFoundation; exported duration verified as 5.0 seconds. Website now plays this segment at 0.7× speed, with a 0.8-source-second crossfade. The lower decoder remains opaque during the handoff to avoid a brightness dip. Original reference video remains untouched.

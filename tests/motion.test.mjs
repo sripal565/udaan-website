@@ -29,3 +29,10 @@ test('cloud overlap starts before the boundary and swaps only after fading in',(
  assert.equal(loopFrame(10,10).swap,true);
  assert.equal(loopFrame(NaN,0).startNext,false);
 });
+
+test('trimmed cloud clip crossfades before its five-second cutoff',()=>{
+ assert.equal(loopFrame(5,4,.8).startNext,false);
+ assert.equal(loopFrame(5,4.25,.8).startNext,true);
+ assert.ok(Math.abs(loopFrame(5,4.6,.8).blend-.5)<.0001);
+ assert.equal(loopFrame(5,5,.8).swap,true);
+});
