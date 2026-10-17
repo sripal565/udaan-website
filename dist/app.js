@@ -6,6 +6,12 @@ const reducedQuery=matchMedia('(prefers-reduced-motion: reduce)');
 let reduced=reducedQuery.matches;
 document.documentElement.classList.add('js-ready');
 const hero=$('.hero-track'),about=$('.about'),flight=$('.flight-track'),arrival=$('.arrival-track'),header=$('.header'),cta=$('.floating-cta');
+const aircraft=$('.aircraft-layer'),aircraftHome=aircraft.parentElement,aircraftNext=aircraft.nextElementSibling;
+function placeAircraft(){
+ if(reduced){aircraftHome.insertBefore(aircraft,aircraftNext);aircraft.classList.remove('aircraft-foreground');}
+ else{document.body.append(aircraft);aircraft.classList.add('aircraft-foreground');}
+}
+placeAircraft();
 const set=(el,name,value)=>el.style.setProperty(name,value);
 const progress=el=>clamp(-el.getBoundingClientRect().top/Math.max(1,el.offsetHeight-innerHeight));
 // Wrap words without changing the accessible reading order.
@@ -23,7 +29,7 @@ function updateScroll(){
  const reveal=clamp((innerHeight*.82-manifesto.getBoundingClientRect().top)/(innerHeight*.65));
  words.forEach((word,i)=>word.classList.toggle('revealed',reduced||reveal>i/words.length));
  const f=flightFrame(progress(flight));
- if(!reduced){set(flight,'--plane-y',`${f.y}vh`);set(flight,'--plane-scale',f.scale);set(flight,'--plane-opacity',f.plane);set(flight,'--title-opacity',f.title);set(flight,'--spec-opacity',f.spec);set(flight,'--spec-y',`${(1-f.spec)*25}px`);}
+ if(!reduced){set(aircraft,'--plane-y',`${f.y}vh`);set(aircraft,'--plane-scale',f.scale);set(aircraft,'--plane-opacity',f.plane);set(flight,'--title-opacity',f.title);set(flight,'--spec-opacity',f.spec);set(flight,'--spec-y',`${(1-f.spec)*25}px`);}
  const a=arrivalFrame(progress(arrival));
  if(!reduced){set(arrival,'--pass-y',`${a.passY}vh`);set(arrival,'--pass-opacity',a.passOpacity);set(arrival,'--pass-rotate',`${-6+progress(arrival)*12}deg`);set(arrival,'--footer-opacity',a.footer);set(arrival,'--footer-y',`${(1-a.footer)*30}px`);set(arrival,'--global-y',`${-progress(arrival)*40}px`);set(arrival,'--label-opacity',1-a.footer);}
  const at=flight.getBoundingClientRect(), experience=$('.experience').getBoundingClientRect();
@@ -51,7 +57,7 @@ items.forEach((item,index)=>item.querySelector('button').addEventListener('click
  schedule();
 }));
 // The image renderer owns visibility, GPU fallback, and motion preferences.
-reducedQuery.addEventListener('change',()=>{reduced=reducedQuery.matches;schedule();});
+reducedQuery.addEventListener('change',()=>{reduced=reducedQuery.matches;placeAircraft();schedule();});
 startClouds($('.cloud-canvas'),reducedQuery);
 // Pointer interactions enhance the page, without intercepting native scrolling.
 if(matchMedia('(pointer:fine)').matches&&!reduced){

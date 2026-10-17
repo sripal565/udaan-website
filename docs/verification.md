@@ -48,3 +48,6 @@ Continuous-motion browser proof: isolated fixed-camera tab at scrollY=0, sampled
 
 ## Bounded cloud drift correction — October 17
 The accumulating `time * depth` lateral offset sheared the cloud photograph increasingly over time. Forward travel now translates the whole image, with depth relief bounded to 0.008 image widths and expansion bounded to 2.5%. Motion has no 45-second cap. An hour-long numerical sweep checks bounded relief and forward movement at five depths; all eight tests and JavaScript syntax checks pass. The standalone study uses the same bounded motion formula.
+
+## Aircraft foreground and cloud gradient — October 17
+The animated aircraft now occupies a fixed foreground layer above page text, the header, and the floating CTA, with pointer events passing through. Reduced-motion mode returns it to its original section. Two silhouette drop shadows provide a soft contact and broader ambient shadow. The last 85svh of the cloud section blends to #d6cfe1, matching the start of the flight background. Desktop browser inspection confirmed BODY parenting, fixed positioning, z-index 80, visible plane/text overlap, shadow, and a continuous boundary gradient. All eight existing tests and syntax checks pass. Cloud timing and renderer are unchanged.
