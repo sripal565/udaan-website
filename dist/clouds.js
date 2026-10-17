@@ -31,7 +31,7 @@ export function startClouds(canvas, reducedMotion) {
  function compile(type,source){const shader=gl.createShader(type);gl.shaderSource(shader,source);gl.compileShader(shader);if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS))throw new Error('Cloud shader compilation failed');return shader;}
  function resize(){
   if(!ready)return;
-  const bounds=canvas.parentElement.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,2);
+  const bounds=canvas.parentElement.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,matchMedia('(max-width:700px)').matches?1.5:2);
   canvas.width=Math.max(1,Math.round(bounds.width*ratio));canvas.height=Math.max(1,Math.round(bounds.height*ratio));
   gl.viewport(0,0,canvas.width,canvas.height);gl.uniform2f(uniforms.resolution,canvas.width,canvas.height);dirty=true;wake();
  }
