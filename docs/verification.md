@@ -23,3 +23,6 @@ Checkpoint: implementation and review complete; publish owner-private preview vi
 
 ## Cloud-direction correction
 Source frames show leftward drift through 5 seconds, a slowdown around 6 seconds, and rightward drift during 6–9 seconds. Exported only 0–5 seconds to cloud-forward-v2.mp4 using AVFoundation; exported duration verified as 5.0 seconds. Website now plays this segment at 0.7× speed, with a 0.8-source-second crossfade. The lower decoder remains opaque during the handoff to avoid a brightness dip. Original reference video remains untouched.
+
+## Replacement with new_cloud.mp4
+The user supplied assets/approval-batch-01/new_cloud.mp4. Decoded 21 frames over 0–9.95 seconds. Cloud-patch displacement remains leftward in all 20 sampled intervals, unlike the old source's reversal. Full ten-second video copied to dist/assets/cloud-drift-v3.mp4, now played at 0.5× speed with the existing 0.8-source-second crossfade. Original supplied file preserved. Finder metadata excluded from future source uploads; existing .DS_Store left untouched.
