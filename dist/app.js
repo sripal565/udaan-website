@@ -1,6 +1,6 @@
-import {clamp, between, smooth, heroFrame, flightFrame, arrivalFrame} from './motion.js';
+import {clamp, between, smooth, heroFrame, flightFrame, arrivalFrame} from './motion.js?v=6';
 import {startGlobe} from './globe.js';
-import {startClouds} from './clouds.js';
+import {startClouds} from './clouds.js?v=6';
 const $ = selector => document.querySelector(selector);
 const reducedQuery=matchMedia('(prefers-reduced-motion: reduce)');
 let reduced=reducedQuery.matches;

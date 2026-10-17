@@ -38,3 +38,10 @@ Renderer pauses offscreen and while the document is hidden. Reduced-motion users
 Verification: timing tests first failed because advanceCloudTime was missing, then passed after implementation. Seven current tests pass; obsolete video-loop tests and helper removed. All four JS modules pass syntax checks. Browser checked desktop and 390×844 mobile: canvas ready, original source loaded, zero video elements, no horizontal overflow, no browser errors. A separate reviewer identified the reduced-motion resize issue; it was fixed before publication. OS-level preference switching was not emulated by the browser tool; its lifecycle paths were reviewed directly.
 
 Checkpoint: approved effect implemented, reviewed and verified; publish owner-private update to the existing Site.
+
+## Continuous, visibly moving cloud correction
+User reported no visible motion on both the study and site. Removed the 45-second endpoint and raised foreground drift to 0.004 source-image widths per second, scaled continuously by depth. The sky/horizon remain anchored. Outward expansion settles after 20 seconds instead of growing indefinitely, while sideways drift continues. Texture coordinates wrap horizontally using the approved image. Added a CSS panorama fallback for devices where WebGL fails; reduced-motion preferences still show a still image.
+
+Added v6 cache keys for the entry script, stylesheet, cloud module and shared motion module so browsers cannot reuse the older capped clock. Canvas exposes data-renderer and data-motion-time for direct runtime diagnosis. Updated timing regression first failed at the former 45-second cap, then passed for advancing beyond 45 and 120 seconds. Seven tests and four-module syntax checks pass.
+
+Continuous-motion browser proof: isolated fixed-camera tab at scrollY=0, sampled at 13.63 and 38.28 seconds. Anchored-sky region mean RGB difference was 0.0; foreground region mean RGB difference was 26.447/255. A later sample still reported active WebGL motion time 64.93 seconds, with zero browser errors. Earlier captures taken during page scrolling were excluded from this comparison.

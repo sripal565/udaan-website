@@ -29,3 +29,10 @@
 .menu nav a>span .icon{width:30px;height:30px}
 .pass-route .icon{width:18px;height:18px}
 @media(max-width:700px){.cta-icon .icon{width:21px;height:21px}.menu nav a>span .icon{width:25px;height:25px}}
+
+/* Visible CSS motion remains available when a browser cannot initialize WebGL. */
+.cloud-media{--cloud-width:max(100vw,calc(100svh * 3))}
+.cloud-fallback{position:absolute;inset:0;background-image:url('assets/cloud-perspective.png');background-size:var(--cloud-width) auto;background-position:50% 50%;background-repeat:repeat-x;animation:cloud-fallback-pan 220s linear infinite}
+.has-cloud-canvas .cloud-fallback{animation-play-state:paused;opacity:0}
+@keyframes cloud-fallback-pan{from{background-position:50% 50%}to{background-position:calc(50% - var(--cloud-width)) 50%}}
+@media(prefers-reduced-motion:reduce){.cloud-fallback{animation:none!important;opacity:1!important}}

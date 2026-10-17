@@ -12,5 +12,5 @@ export function arrivalFrame(p) {
  return { passY: 110 - between(p, .08, .65) * 210, passOpacity: smooth(between(p,.06,.18)) * (1 - smooth(between(p,.6,.77))), footer: smooth(between(p,.58,.83)) };
 }
 export function advanceCloudTime(elapsed, deltaSeconds, enabled) {
- return Math.min(45, elapsed + (enabled ? clamp(deltaSeconds, 0, .05) : 0));
+ return elapsed + (enabled ? clamp(deltaSeconds, 0, .05) : 0);
 }

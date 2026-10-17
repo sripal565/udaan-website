@@ -1,7 +1,7 @@
-import {advanceCloudTime} from './motion.js';
+import {advanceCloudTime} from './motion.js?v=6';
 
 // One untouched photograph, with the same continuous depth field approved in the study.
-// The bounded glide holds its final frame after 45 seconds; it never rewinds or crossfades.
+// Foreground drift continues while visible; outward expansion settles without stretching forever.
 export function startClouds(canvas, reducedMotion) {
  const container=canvas.closest('.voyage');
  let gl,program,texture,uniforms,ready=false,failed=false,visible=true;
@@ -21,13 +21,13 @@ export function startClouds(canvas, reducedMotion) {
   float horizon=.43;
   float below=max(0.,uv.y-horizon)/(1.-horizon);
   float depth=pow(clamp(below,0.,1.),1.65);
-  float travel=u_time*.7;
-  uv.x=.5+(uv.x-.5)/(1.+travel*.0017*depth)+travel*.00065*depth;
-  uv.y=horizon+(uv.y-horizon)/(1.+travel*.0014*depth);
+  float travel=min(u_time,20.);
+  uv.x=.5+(uv.x-.5)/(1.+travel*.002*depth)+u_time*.004*depth;
+  uv.y=horizon+(uv.y-horizon)/(1.+travel*.0015*depth);
   gl_FragColor=texture2D(u_image,vec2(fract(uv.x),clamp(uv.y,.001,.999)));
  }`;
  function stop(){cancelAnimationFrame(frame);frame=0;last=0;}
- function fallback(){failed=true;ready=false;stop();canvas.classList.remove('is-ready');}
+ function fallback(){failed=true;ready=false;stop();canvas.classList.remove('is-ready');canvas.parentElement.classList.remove('has-cloud-canvas');canvas.dataset.renderer='css';}
  function compile(type,source){const shader=gl.createShader(type);gl.shaderSource(shader,source);gl.compileShader(shader);if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS))throw new Error('Cloud shader compilation failed');return shader;}
  function resize(){
   if(!ready)return;
@@ -40,8 +40,8 @@ export function startClouds(canvas, reducedMotion) {
   if(!ready||failed||!visible||document.hidden||reducedMotion.matches){last=0;return;}
   const previous=elapsed;
   elapsed=advanceCloudTime(elapsed,last?(now-last)/1000:0,true);last=now;
-  if(dirty||elapsed!==previous){gl.uniform1f(uniforms.time,elapsed);gl.drawArrays(gl.TRIANGLES,0,6);dirty=false;canvas.classList.add('is-ready');}
-  if(elapsed<45)frame=requestAnimationFrame(draw);
+  if(dirty||elapsed!==previous){gl.uniform1f(uniforms.time,elapsed);gl.drawArrays(gl.TRIANGLES,0,6);dirty=false;canvas.classList.add('is-ready');canvas.parentElement.classList.add('has-cloud-canvas');canvas.dataset.renderer='webgl';canvas.dataset.motionTime=elapsed.toFixed(2);}
+  frame=requestAnimationFrame(draw);
  }
  function wake(){if(ready&&!failed&&visible&&!document.hidden&&!reducedMotion.matches&&!frame){last=0;frame=requestAnimationFrame(draw);}}
  async function initialize(){
@@ -64,7 +64,7 @@ export function startClouds(canvas, reducedMotion) {
  }
  const observer=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible){initialize();wake();}else stop();});observer.observe(container);
  const onVisibility=()=>document.hidden?stop():wake();
- const onPreference=()=>{if(reducedMotion.matches){stop();canvas.classList.remove('is-ready');}else{dirty=true;initialize();resize();wake();}};
+ const onPreference=()=>{if(reducedMotion.matches){stop();canvas.classList.remove('is-ready');canvas.parentElement.classList.remove('has-cloud-canvas');}else{dirty=true;initialize();resize();wake();}};
  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();fallback();});
  addEventListener('resize',resize);document.addEventListener('visibilitychange',onVisibility);reducedMotion.addEventListener('change',onPreference);
  initialize();
