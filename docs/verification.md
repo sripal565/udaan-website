@@ -29,3 +29,12 @@ The user supplied assets/approval-batch-01/new_cloud.mp4. Decoded 21 frames over
 
 ## Native frame cadence and vector arrows
 Inspected original and deployed video metadata: both 1280×720, 24 fps, ~2.21 Mbps. SHA-256 hashes match, proving the site did not transcode or lower the supplied file resolution. Previous 0.5× playback reduced unique frame cadence to ~12 fps; corrected to 1×. Removed the extra 1.04 CSS enlargement. Source remains 720p and will remain soft on large/high-density displays until replaced by a higher-resolution source. Replaced all diagonal/up/down arrow characters with aria-hidden inline SVG strokes, including the mobile CTA.
+
+## Approved perspective effect integrated into the site
+Replaced both cloud video elements with the single approved cloud-perspective.png and a WebGL canvas. dist/clouds.js applies the exact preview depth field: horizon 0.43, depth exponent 1.65, strength 0.7, subtle lateral drift and outward expansion. Motion advances for at most 45 visible seconds and holds its final frame. It does not reverse, loop, or crossfade. No video elements remain in the document. Old media files remain archived but are not requested by the page.
+
+Renderer pauses offscreen and while the document is hidden. Reduced-motion users see the original still; unsupported/lost WebGL also falls back to that still. Resizing measures the visible cloud-media container so a display:none canvas cannot create a 1×1 buffer during preference changes. The opt-back-in path explicitly resizes before resuming.
+
+Verification: timing tests first failed because advanceCloudTime was missing, then passed after implementation. Seven current tests pass; obsolete video-loop tests and helper removed. All four JS modules pass syntax checks. Browser checked desktop and 390×844 mobile: canvas ready, original source loaded, zero video elements, no horizontal overflow, no browser errors. A separate reviewer identified the reduced-motion resize issue; it was fixed before publication. OS-level preference switching was not emulated by the browser tool; its lifecycle paths were reviewed directly.
+
+Checkpoint: approved effect implemented, reviewed and verified; publish owner-private update to the existing Site.

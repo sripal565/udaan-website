@@ -1,1 +1,1 @@
-{"name":"udaan-cinematic","private":true,"type":"module","scripts":{"dev":"python3 -m http.server 4173 --directory dist","test":"node --test tests/*.test.mjs","check":"node --check dist/app.js && node --check dist/globe.js && node --check dist/motion.js"}}
+{"name":"udaan-cinematic","private":true,"type":"module","scripts":{"dev":"python3 -m http.server 4173 --directory dist","test":"node --test tests/*.test.mjs","check":"node --check dist/app.js && node --check dist/globe.js && node --check dist/motion.js && node --check dist/clouds.js"}}

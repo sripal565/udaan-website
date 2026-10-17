@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {heroFrame,flightFrame,arrivalFrame,loopFrame} from '../dist/motion.js';
+import {heroFrame,flightFrame,arrivalFrame} from '../dist/motion.js';
 test('window opens fully and headline clears before clouds take over',()=>{
  assert.equal(heroFrame(0).scale,1);assert.equal(heroFrame(0).copy,1);
  assert.equal(heroFrame(.35).copy,0);assert.equal(heroFrame(1).opacity,0);
@@ -18,21 +18,4 @@ test('boarding pass clears and contact footer stays visible at end',()=>{
 });
 test('all frames remain finite and bounded during overscroll',()=>{
  for(const p of [-1,0,.2,.5,.8,1,2])for(const f of [heroFrame(p),flightFrame(p),arrivalFrame(p)])for(const value of Object.values(f))assert.ok(Number.isFinite(value));
-});
-
-test('cloud overlap starts before the boundary and swaps only after fading in',()=>{
- assert.equal(loopFrame(10,8).startNext,false);
- assert.equal(loopFrame(10,8.5).startNext,true);
- assert.equal(loopFrame(10,9.25).blend,.5);
- assert.equal(loopFrame(10,9.25).swap,false);
- assert.equal(loopFrame(10,10).blend,1);
- assert.equal(loopFrame(10,10).swap,true);
- assert.equal(loopFrame(NaN,0).startNext,false);
-});
-
-test('trimmed cloud clip crossfades before its five-second cutoff',()=>{
- assert.equal(loopFrame(5,4,.8).startNext,false);
- assert.equal(loopFrame(5,4.25,.8).startNext,true);
- assert.ok(Math.abs(loopFrame(5,4.6,.8).blend-.5)<.0001);
- assert.equal(loopFrame(5,5,.8).swap,true);
 });
