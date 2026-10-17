@@ -33,7 +33,7 @@ function updateScroll(){
  const aircraftVisible=flightBounds.top<innerHeight&&flightBounds.bottom>0;
  if(!reduced){set(aircraft,'--plane-y',`${f.y}vh`);set(aircraft,'--plane-scale',f.scale);set(aircraft,'--plane-opacity',aircraftVisible?f.plane:0);set(flight,'--title-opacity',f.title);set(flight,'--spec-opacity',f.spec);set(flight,'--spec-y',`${(1-f.spec)*25}px`);}
  const a=arrivalFrame(progress(arrival));
- if(!reduced){set(arrival,'--pass-y',`${a.passY}vh`);set(arrival,'--pass-opacity',a.passOpacity);set(arrival,'--pass-rotate',`${-6+progress(arrival)*12}deg`);set(arrival,'--footer-opacity',a.footer);set(arrival,'--footer-y',`${(1-a.footer)*30}px`);set(arrival,'--global-y',`${-progress(arrival)*40}px`);set(arrival,'--label-opacity',1-a.footer);}
+ if(!reduced){set(arrival,'--pass-y',`${a.passY}vh`);set(arrival,'--pass-opacity',a.passOpacity);set(arrival,'--pass-rotate',`${-6+progress(arrival)*12}deg`);set(arrival,'--footer-opacity',a.footer);set(arrival,'--footer-y',`${(1-a.footer)*30}px`);set(arrival,'--global-y',`${-progress(arrival)*40}px`);}
  const at=flight.getBoundingClientRect(), experience=$('.experience').getBoundingClientRect();
  header.classList.toggle('ink',(at.top<70&&at.bottom>70)||(experience.top<70&&experience.bottom>70));
  const footerVisible=reduced?$('.footer').getBoundingClientRect().top<innerHeight*.85:a.footer>.65;
