@@ -67,7 +67,7 @@ function tickVideo(){
  }
  requestAnimationFrame(tickVideo);
 }
-videos.forEach(v=>{v.muted=true;v.playbackRate=.5;v.addEventListener('loadeddata',startVideos,{once:true});});
+videos.forEach(v=>{v.muted=true;v.playbackRate=1;v.addEventListener('loadeddata',startVideos,{once:true});});
 const videoObserver=new IntersectionObserver(([entry])=>{mediaVisible=entry.isIntersecting;if(mediaVisible)startVideos();else videos.forEach(v=>v.pause());},{threshold:0});videoObserver.observe($('.voyage'));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)videos.forEach(v=>v.pause());else startVideos();});
 reducedQuery.addEventListener('change',()=>{reduced=reducedQuery.matches;resetVideos();if(!reduced)startVideos();schedule();});

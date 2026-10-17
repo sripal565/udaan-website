@@ -26,3 +26,6 @@ Source frames show leftward drift through 5 seconds, a slowdown around 6 seconds
 
 ## Replacement with new_cloud.mp4
 The user supplied assets/approval-batch-01/new_cloud.mp4. Decoded 21 frames over 0–9.95 seconds. Cloud-patch displacement remains leftward in all 20 sampled intervals, unlike the old source's reversal. Full ten-second video copied to dist/assets/cloud-drift-v3.mp4, now played at 0.5× speed with the existing 0.8-source-second crossfade. Original supplied file preserved. Finder metadata excluded from future source uploads; existing .DS_Store left untouched.
+
+## Native frame cadence and vector arrows
+Inspected original and deployed video metadata: both 1280×720, 24 fps, ~2.21 Mbps. SHA-256 hashes match, proving the site did not transcode or lower the supplied file resolution. Previous 0.5× playback reduced unique frame cadence to ~12 fps; corrected to 1×. Removed the extra 1.04 CSS enlargement. Source remains 720p and will remain soft on large/high-density displays until replaced by a higher-resolution source. Replaced all diagonal/up/down arrow characters with aria-hidden inline SVG strokes, including the mobile CTA.
