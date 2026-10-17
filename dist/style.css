@@ -52,3 +52,5 @@
 .identity>img{object-fit:contain;filter:brightness(0) invert(1)}
 .pass-top img{filter:none;object-fit:contain}
 @media(max-width:700px){.wordmark .official-logo{width:52px;height:40px}.window-word .official-logo{width:100px}}
+
+@media(max-width:700px){.header .wordmark{font-size:28px;letter-spacing:.13em;line-height:1.35;white-space:nowrap}.header .wordmark span{letter-spacing:.22em;text-align:left;margin-top:5px}}
