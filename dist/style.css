@@ -38,7 +38,7 @@
 @media(prefers-reduced-motion:reduce){.cloud-fallback{animation:none!important;opacity:1!important}}
 
 /* The last cloud pixels meet the first flight pixels at exactly the same color. */
-.voyage::after{content:'';position:absolute;inset:auto 0 0;height:85svh;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(214,207,225,0) 0%,rgba(214,207,225,.12) 20%,rgba(214,207,225,.48) 50%,rgba(214,207,225,.85) 78%,#d6cfe1 100%)}
+.voyage::after{content:'';position:absolute;inset:auto 0 -2px;height:calc(85svh + 2px);z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(214,207,225,0) 0%,rgba(214,207,225,.12) 20%,rgba(214,207,225,.48) 50%,rgba(214,207,225,.85) 78%,#d6cfe1 96%,#d6cfe1 100%)}
 .aircraft-layer.aircraft-foreground{position:fixed;z-index:80;overflow:visible}
 .aircraft-shadow{filter:drop-shadow(0 28px 18px #260e4655) drop-shadow(8px 55px 38px #260e462b)}
 @media(max-width:700px){.aircraft-shadow{filter:drop-shadow(0 19px 14px #260e4655) drop-shadow(5px 35px 25px #260e462b)}}
