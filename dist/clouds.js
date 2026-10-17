@@ -1,7 +1,7 @@
-import {advanceCloudTime} from './motion.js?v=6';
+import {advanceCloudTime,cloudFrame} from './motion.js?v=7';
 
 // One untouched photograph, with the same continuous depth field approved in the study.
-// Foreground drift continues while visible; outward expansion settles without stretching forever.
+// Rigid forward travel carries the photograph; depth relief stays bounded to prevent cumulative shearing.
 export function startClouds(canvas, reducedMotion) {
  const container=canvas.closest('.voyage');
  let gl,program,texture,uniforms,ready=false,failed=false,visible=true;
@@ -11,7 +11,7 @@ export function startClouds(canvas, reducedMotion) {
  varying vec2 v_uv;
  uniform sampler2D u_image;
  uniform vec2 u_resolution;
- uniform float u_time;
+ uniform vec3 u_motion;
  void main(){
   vec2 screen=vec2(v_uv.x,1.-v_uv.y);
   float screenAspect=u_resolution.x/u_resolution.y;
@@ -21,9 +21,9 @@ export function startClouds(canvas, reducedMotion) {
   float horizon=.43;
   float below=max(0.,uv.y-horizon)/(1.-horizon);
   float depth=pow(clamp(below,0.,1.),1.65);
-  float travel=min(u_time,20.);
-  uv.x=.5+(uv.x-.5)/(1.+travel*.002*depth)+u_time*.004*depth;
-  uv.y=horizon+(uv.y-horizon)/(1.+travel*.0015*depth);
+  float expansion=u_motion.z*depth;
+  uv.x=.5+(uv.x-.5)/(1.+expansion)+u_motion.x+u_motion.y*depth;
+  uv.y=horizon+(uv.y-horizon)/(1.+expansion*.8);
   gl_FragColor=texture2D(u_image,vec2(fract(uv.x),clamp(uv.y,.001,.999)));
  }`;
  function stop(){cancelAnimationFrame(frame);frame=0;last=0;}
@@ -40,7 +40,7 @@ export function startClouds(canvas, reducedMotion) {
   if(!ready||failed||!visible||document.hidden||reducedMotion.matches){last=0;return;}
   const previous=elapsed;
   elapsed=advanceCloudTime(elapsed,last?(now-last)/1000:0,true);last=now;
-  if(dirty||elapsed!==previous){gl.uniform1f(uniforms.time,elapsed);gl.drawArrays(gl.TRIANGLES,0,6);dirty=false;canvas.classList.add('is-ready');canvas.parentElement.classList.add('has-cloud-canvas');canvas.dataset.renderer='webgl';canvas.dataset.motionTime=elapsed.toFixed(2);}
+  if(dirty||elapsed!==previous){const motion=cloudFrame(elapsed);gl.uniform3f(uniforms.motion,motion.drift,motion.relief,motion.expansion);gl.drawArrays(gl.TRIANGLES,0,6);dirty=false;canvas.classList.add('is-ready');canvas.parentElement.classList.add('has-cloud-canvas');canvas.dataset.renderer='webgl';canvas.dataset.motionTime=elapsed.toFixed(2);}
   frame=requestAnimationFrame(draw);
  }
  function wake(){if(ready&&!failed&&visible&&!document.hidden&&!reducedMotion.matches&&!frame){last=0;frame=requestAnimationFrame(draw);}}
@@ -58,7 +58,7 @@ export function startClouds(canvas, reducedMotion) {
    if(image.naturalWidth>gl.getParameter(gl.MAX_TEXTURE_SIZE))throw new Error('Cloud texture exceeds device limit');
    texture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,texture);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,image);
    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-   uniforms={resolution:gl.getUniformLocation(program,'u_resolution'),time:gl.getUniformLocation(program,'u_time')};
+   uniforms={resolution:gl.getUniformLocation(program,'u_resolution'),motion:gl.getUniformLocation(program,'u_motion')};
    ready=true;resize();
   }catch{fallback();}
  }

@@ -14,3 +14,7 @@ export function arrivalFrame(p) {
 export function advanceCloudTime(elapsed, deltaSeconds, enabled) {
  return elapsed + (enabled ? clamp(deltaSeconds, 0, .05) : 0);
 }
+
+export function cloudFrame(time) {
+ return {drift:time*.0028,relief:.008*Math.sin(time*.08),expansion:.025*(1-Math.exp(-time/12))};
+}

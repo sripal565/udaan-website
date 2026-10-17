@@ -12,3 +12,13 @@ test('returning after a background-tab gap cannot jump the perspective',()=>{
  assert.equal(advanceCloudTime(10,5,true),10.05);
  assert.equal(advanceCloudTime(10,-1,true),10);
 });
+test('depth distortion stays bounded and every cloud band keeps moving forward',async()=>{
+ const {cloudFrame}=await import('../dist/motion.js');
+ for(let time=0;time<=3600;time+=.25){
+  const a=cloudFrame(time),b=cloudFrame(time+.01);
+  assert.ok(Math.abs(a.relief)<=.008);
+  assert.ok(a.expansion>=0&&a.expansion<=.025);
+  for(const depth of [0,.25,.5,.75,1])
+   assert.ok(b.drift+b.relief*depth>a.drift+a.relief*depth);
+ }
+});

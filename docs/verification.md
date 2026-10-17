@@ -45,3 +45,6 @@ User reported no visible motion on both the study and site. Removed the 45-secon
 Added v6 cache keys for the entry script, stylesheet, cloud module and shared motion module so browsers cannot reuse the older capped clock. Canvas exposes data-renderer and data-motion-time for direct runtime diagnosis. Updated timing regression first failed at the former 45-second cap, then passed for advancing beyond 45 and 120 seconds. Seven tests and four-module syntax checks pass.
 
 Continuous-motion browser proof: isolated fixed-camera tab at scrollY=0, sampled at 13.63 and 38.28 seconds. Anchored-sky region mean RGB difference was 0.0; foreground region mean RGB difference was 26.447/255. A later sample still reported active WebGL motion time 64.93 seconds, with zero browser errors. Earlier captures taken during page scrolling were excluded from this comparison.
+
+## Bounded cloud drift correction — October 17
+The accumulating `time * depth` lateral offset sheared the cloud photograph increasingly over time. Forward travel now translates the whole image, with depth relief bounded to 0.008 image widths and expansion bounded to 2.5%. Motion has no 45-second cap. An hour-long numerical sweep checks bounded relief and forward movement at five depths; all eight tests and JavaScript syntax checks pass. The standalone study uses the same bounded motion formula.
