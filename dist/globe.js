@@ -1,4 +1,11 @@
+export function projectGlobePoint(lon,lat,size,rotation,tilt=.32,r=size*.43) {
+ const rad=Math.PI/180,a=lon*rad-rotation,b=lat*rad;
+ const x=Math.cos(b)*Math.sin(a),y=Math.sin(b)*Math.cos(tilt)-Math.cos(b)*Math.cos(a)*Math.sin(tilt),z=Math.sin(b)*Math.sin(tilt)+Math.cos(b)*Math.cos(a)*Math.cos(tilt);
+ return [size/2+r*x,size/2-r*y,z];
+}
 export async function startGlobe(canvas, reducedMotion) {
+ const label=canvas.parentElement.querySelector('.globe-label');
+ if(label)label.hidden=true;
  const ctx = canvas.getContext('2d');
  if (!ctx) return;
  let land;
@@ -11,9 +18,7 @@ export async function startGlobe(canvas, reducedMotion) {
  resize(); addEventListener('resize',resize);
  const rad = Math.PI / 180;
  function project(lon,lat,r,rotation,tilt=.32) {
-  const a=lon*rad-rotation, b=lat*rad;
-  const x=Math.cos(b)*Math.sin(a), y=Math.sin(b)*Math.cos(tilt)-Math.cos(b)*Math.cos(a)*Math.sin(tilt),z=Math.sin(b)*Math.sin(tilt)+Math.cos(b)*Math.cos(a)*Math.cos(tilt);
-  return [size/2+r*x,size/2-r*y,z];
+  return projectGlobePoint(lon,lat,size,rotation,tilt,r);
  }
  function line(points,r,rotation,color,width=1) {
   ctx.beginPath(); let started=false;
@@ -54,6 +59,11 @@ export async function startGlobe(canvas, reducedMotion) {
    ctx.strokeStyle='#b6a0ce55';ctx.lineWidth=.8;ctx.stroke();
   }
   const [dx,dy,dz]=project(...destination,r,angle);
+  if(label){
+   label.hidden=dz<=0;
+   label.style.setProperty('--globe-label-x',`${canvas.offsetLeft-canvas.clientWidth/2+dx}px`);
+   label.style.setProperty('--globe-label-y',`${canvas.offsetTop+dy}px`);
+  }
   if(dz>0){ctx.beginPath();ctx.arc(dx,dy,2.7,0,Math.PI*2);ctx.fillStyle='#e4d8fa';ctx.shadowColor='#ccc1ef';ctx.shadowBlur=15;ctx.fill();ctx.shadowBlur=0;ctx.beginPath();ctx.arc(dx,dy,8,0,Math.PI*2);ctx.strokeStyle='#ccc1ef66';ctx.stroke();}
  }
  frame=requestAnimationFrame(draw);

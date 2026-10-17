@@ -57,3 +57,6 @@ The supplied phone screenshots showed an absolutely positioned detail-list divid
 
 ## Performance step 1 — mobile cloud resolution only
 User approved reducing the mobile cloud-canvas pixel-ratio ceiling from 2 to 1.5. Widths at or below 700 CSS pixels use min(devicePixelRatio,1.5); wider screens retain min(devicePixelRatio,2). No motion timing, shadows, blur, globe, or other performance settings changed. All eight tests and syntax checks pass. Browser preview at 390x844 initialized WebGL and preserved layout; this browser reports DPR 1, so actual 1.5x rendering on a high-DPR phone remains for user validation. At DPR >=2 the cloud render target has 43.75% fewer pixels; this is not a measured frame-rate improvement.
+
+## Urbana–Champaign label tracking
+The destination label now uses the same orthographic projection, rotation angle, and coordinates as the globe's destination dot. Canvas offsets place it in the parent section's coordinates, including responsive globe sizing. The duplicate CSS dot is hidden; the existing canvas marker remains. The label hides on the rear hemisphere and retains the existing scroll fade. Two projection tests cover rotation, responsive scale, and rear-hemisphere detection; all ten tests and syntax checks pass. No performance settings changed.
