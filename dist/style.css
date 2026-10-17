@@ -54,3 +54,29 @@
 @media(max-width:700px){.wordmark .official-logo{width:52px;height:40px}.window-word .official-logo{width:100px}}
 
 @media(max-width:700px){.header .wordmark{font-size:28px;letter-spacing:.13em;line-height:1.35;white-space:nowrap}.header .wordmark span{letter-spacing:.22em;text-align:left;margin-top:5px}}
+
+/* Mobile details share layout rows, so dividers cannot cross the copy. */
+@media(max-width:700px){
+ .identity{align-items:center}
+ .identity>span{font-size:28px;line-height:1.35;letter-spacing:.10em;flex-shrink:0}
+ .identity small{letter-spacing:.06em;line-height:1.5}
+ .flight-top{opacity:var(--title-opacity,1)}
+ .specification{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-rows:auto auto auto;align-content:start;gap:16px 24px;padding:104px 6vw 95px}
+ .specification .spec-heading{position:static;grid-column:1/-1}
+ .spec-heading h2{font-size:29px;margin-top:12px}
+ .specification .spec-right{position:static;grid-column:1;grid-row:2;width:auto}
+ .spec-right h3{font-size:18px;margin:12px 0}
+ .spec-right p{font-size:11px;line-height:1.5}
+ .specification .blueprint{position:static;grid-column:2;grid-row:2;align-self:center;justify-self:center;transform:none;height:auto;width:100%;max-width:100%;max-height:38svh;object-fit:contain}
+ .specification .spec-left{position:static;grid-column:1;grid-row:3;width:auto;margin:0}
+ .specification .spec-bottom{position:static;grid-column:2;grid-row:3;align-self:end;margin:0}
+ .specification dl div{padding:9px 0}
+ .specification dt{font-size:7px}
+ .specification dd{font-size:11px}
+}
+@media(max-width:700px) and (max-height:740px){
+ .specification{padding-top:96px;gap:12px 20px}
+ .spec-heading h2{margin-top:8px}
+ .spec-right h3{margin:10px 0}
+ .specification dl div{padding:8px 0}
+}
